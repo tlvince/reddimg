@@ -1,7 +1,10 @@
 {
   "name": "reddimg",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "connect": "^3.1.1",
+    "serve-static": "^1.5.4"
+  },
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-angular-templates": "^0.5.7",
@@ -14,12 +17,12 @@
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-cssmin": "^0.9.0",
     "grunt-contrib-htmlmin": "^0.3.0",
-    "grunt-contrib-imagemin": "^0.7.0",
+    "grunt-contrib-imagemin": "^0.8.1",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^0.2.1",
-    "grunt-google-cdn": "^0.4.0",
+    "grunt-google-cdn": "^0.4.3",
     "grunt-karma": "^0.8.3",
     "grunt-newer": "^0.7.0",
     "grunt-ng-annotate": "^0.3.2",
@@ -42,7 +45,7 @@
     "test-watch": "./node_modules/karma/bin/karma start --autoWatch true --singleRun false test/karma.conf.js"
   },
   "description": "Reddit image viewer",
-  "main": "Gruntfile.js",
+  "main": "server.js",
   "directories": {
     "test": "test"
   },
