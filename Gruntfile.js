@@ -200,7 +200,18 @@ module.exports = function (grunt) {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
-        assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
+        assetsDirs: [
+          '<%= yeoman.dist %>',
+          '<%= yeoman.dist %>/images'
+        ],
+        patterns: {
+          js: [
+            [
+              /(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm,
+              'Update the JS to reference our revved images'
+            ]
+          ]
+        }
       }
     },
 
@@ -238,15 +249,39 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: ['*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
     },
 
-    // ngmin tries to make the code safe for minification automatically by
-    // using the Angular long form for dependency injection. It doesn't work on
-    // things like resolve or inject so those have to be done manually.
+    uglify: {
+      options: {
+        // jshint camelcase: false
+        mangle: {
+          screw_ie8: true
+        },
+        compress: {
+          screw_ie8: true,
+          sequences: true,
+          properties: true,
+          dead_code: true,
+          drop_debugger: true,
+          comparisons: true,
+          conditionals: true,
+          evaluate: true,
+          booleans: true,
+          loops: true,
+          unused: true,
+          hoist_funs: true,
+          if_return: true,
+          join_vars: true,
+          cascade: true,
+          drop_console: true
+        }
+      }
+    },
+
     ngAnnotate: {
       dist: {
         files: [{
@@ -268,25 +303,33 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            '.htaccess',
-            '*.html',
-            'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
-          ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: ['generated/*']
-        }]
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dist %>',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              '*.html',
+              'images/{,*/}*.{webp}',
+              'fonts/*'
+            ]
+          },
+          {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= yeoman.dist %>/images',
+            src: ['generated/*']
+          },
+          {
+            expand: true,
+            cwd: './bower_components/bootstrap-css-only/',
+            dest: '<%= yeoman.dist %>',
+            src: 'fonts/*'
+          },
+        ]
       },
       styles: {
         expand: true,
@@ -328,7 +371,23 @@ module.exports = function (grunt) {
         commitFiles: '<%= bump.options.files %>',
         pushTo: 'origin'
       }
-    }
+    },
+
+    ngtemplates: {
+      reddimgApp: {
+        options: {
+          htmlmin: '<%= htmlmin.dist.options %>',
+          usemin: 'scripts/scripts.js'
+        },
+        cwd: '<%= yeoman.app %>',
+        src: [
+          'templates/**/*.html',
+          'views/**/*.html'
+        ],
+        dest: '.tmp/concat/scripts/templates.js'
+      }
+    },
+
   });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -360,8 +419,9 @@ module.exports = function (grunt) {
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
+    'ngtemplates',
     'concat',
-    'ngmin',
+    'ngAnnotate',
     'copy:dist',
     'cdnify',
     'cssmin',
