@@ -1,0 +1,19 @@
+<div class="header" ng-controller="NavCtrl as ctrl">
+  <ul class="nav nav-pills pull-right">
+    <li ng-repeat="nav in ctrl.navs" ng-class="{active: ctrl.isActive(nav)}">
+      <a ng-href="#/{{nav.id}}" ng-bind="nav.label" ng-click="ctrl.choose(nav)"></a>
+    </li>
+    <li>
+      <a ng-click="ctrl.settings('toggle')">
+        <i class="glyphicon glyphicon-cog" title="Toggle settings"></i>
+      </a>
+    </li>
+  </ul>
+  <a ng-href="#" ng-click="ctrl.choose('')">
+    <h1 class="text-muted">
+      <i class="glyphicon glyphicon-camera"></i>
+      <span>reddimg</span>
+    </h1>
+  </a>
+  <div ng-include="src='views/settings.html'" ng-if="ctrl.settings()"></div>
+</div>
