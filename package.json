@@ -31,13 +31,15 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.4.0",
-    "time-grunt": "^0.3.1"
+    "time-grunt": "^0.3.1",
+    "wiredep": "^1.8.5"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "test-watch": "./node_modules/karma/bin/karma start --autoWatch true --singleRun false test/karma.conf.js"
   },
   "description": "Reddit image viewer",
   "main": "Gruntfile.js",

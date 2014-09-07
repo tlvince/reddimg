@@ -5,18 +5,14 @@ describe('Controller: ImgsCtrl', function () {
   // load the controller's module
   beforeEach(module('reddimgApp'));
 
-  var ImgsCtrl,
-    scope;
+  var ImgsCtrl;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
-    scope = $rootScope.$new();
-    ImgsCtrl = $controller('ImgsCtrl', {
-      $scope: scope
-    });
+  beforeEach(inject(function($controller) {
+    ImgsCtrl = $controller('ImgsCtrl');
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  it('should bind images', function () {
+    expect(angular.isObject(ImgsCtrl.imgs)).toBe(true);
   });
 });
