@@ -410,23 +410,33 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'wiredep',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'filerev',
-    'usemin',
-    'htmlmin'
-  ]);
+  grunt.registerTask('build', function(target) {
+    var pre = [
+      'clean:dist'
+    ];
+
+    var post = [
+      'useminPrepare',
+      'concurrent:dist',
+      'autoprefixer',
+      'ngtemplates',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'filerev',
+      'usemin',
+      'htmlmin'
+    ];
+
+    if (target === 'heroku') {
+      return grunt.task.run(pre.concat(post));
+    }
+
+    grunt.task.run(pre.concat(['wiredep'], post));
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',
@@ -435,19 +445,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('heroku', [
-    'clean:dist',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'filerev',
-    'usemin',
-    'htmlmin'
+    'build:heroku'
   ]);
 };
