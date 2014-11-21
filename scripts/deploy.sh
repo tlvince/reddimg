@@ -12,9 +12,8 @@ git config --global user.name "TravisCI"
 git config --global user.email "travis@example.com"
 cat .known_hosts >> ~/.ssh/known_hosts
 gem install heroku
-heroku keys:clear
 echo yes | heroku keys:add
 grunt build
 mv dist/index.html dist/index.php
-echo yes | grunt buildcontrol:heroku
-heroku keys:clear
+grunt buildcontrol:heroku
+heroku keys:remove "$(< ~/.ssh/id_rsa.pub)"
