@@ -15,5 +15,6 @@ gem install heroku
 heroku keys:clear
 echo yes | heroku keys:add
 grunt build
+mv dist/index.html dist/index.php
 echo yes | grunt buildcontrol:heroku
 heroku keys:clear
