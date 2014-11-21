@@ -35,6 +35,12 @@ angular.module('reddimgApp')
               return img.url.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i);
             })
             .map(function(img) {
+              if (img.url.match(/^http:\/\//i)) {
+                img.url = img.url.substr(5);
+              }
+              return img;
+            })
+            .map(function(img) {
               return {
                 permalink: config.reddit.host + img.permalink,
                 title: img.title,
