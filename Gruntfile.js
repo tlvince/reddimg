@@ -11,7 +11,8 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist',
+    version: require('./package.json').version
   };
 
   // Define the configuration for all the tasks
@@ -385,6 +386,20 @@ module.exports = function (grunt) {
       }
     },
 
+    buildcontrol: {
+      options: {
+        commit: true,
+        tag: appConfig.version,
+        push: true
+      },
+      heroku: {
+        options: {
+          remote: 'git@heroku.com:reddimg.git',
+          branch: 'master'
+        }
+      }
+    }
+
   });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -410,41 +425,27 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('build', function(target) {
-    var pre = [
-      'clean:dist'
-    ];
-
-    var post = [
-      'useminPrepare',
-      'concurrent:dist',
-      'autoprefixer',
-      'ngtemplates',
-      'concat',
-      'ngAnnotate',
-      'copy:dist',
-      'cdnify',
-      'cssmin',
-      'uglify',
-      'filerev',
-      'usemin',
-      'htmlmin'
-    ];
-
-    if (target === 'heroku') {
-      return grunt.task.run(pre.concat(post));
-    }
-
-    grunt.task.run(pre.concat(['wiredep'], post));
-  });
+  grunt.registerTask('build', [
+    'clean:dist',
+    'wiredep',
+    'useminPrepare',
+    'concurrent:dist',
+    'autoprefixer',
+    'ngtemplates',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'filerev',
+    'usemin',
+    'htmlmin'
+  ]);
 
   grunt.registerTask('default', [
     'newer:jshint',
     'test',
     'build'
-  ]);
-
-  grunt.registerTask('heroku', [
-    'build:heroku'
   ]);
 };
