@@ -10,7 +10,7 @@ error() { info "$1"; exit 1; }
 
 git config --global user.name "TravisCI"
 git config --global user.email "travis@example.com"
-cat .known_hosts >> ~/.ssh/known_hosts
+ssh-keyscan -t rsa heroku.com >> ~/.ssh/known_hosts 2>/dev/null
 gem install heroku
 echo yes | heroku keys:add
 grunt build
